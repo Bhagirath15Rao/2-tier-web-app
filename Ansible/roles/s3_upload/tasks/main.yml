@@ -1,0 +1,15 @@
+- name: Upload photo to S3
+  aws_s3:
+    bucket: "{{ bucket }}"
+    object: kangaroo.jpg
+    src:  kangaroo.jpg
+    mode: put
+    permission: public-read
+
+- name: Upload photo to S3
+  aws_s3:
+    bucket: "{{ bucket }}"
+    object: reflective-kangaroo.jpg
+    src:  reflective-kangaroo.jpg
+    mode: put
+    permission: public-read

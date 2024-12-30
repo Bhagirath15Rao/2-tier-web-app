@@ -1,0 +1,35 @@
+- name: Check if the instance key exists
+  stat:
+    path: "./bastion-reflective_kangaroo-{{ env }}"
+  register: bastion_reflective_kangaroo_stat
+
+- name: Copy instance key to Ansible directory
+  copy:
+    src: "../Terraform_Final/main/bastion-reflective_kangaroo-{{ env }}"
+    dest: "./bastion-reflective_kangaroo-{{ env }}"
+    remote_src: no
+  when: not bastion_reflective_kangaroo_stat.stat.exists
+
+- name: Set correct permissions on the instance key
+  file:
+    path: "./bastion-reflective_kangaroo-{{ env }}"
+    mode: "0600"
+  when: not bastion_reflective_kangaroo_stat.stat.exists
+
+- name: Check if the instance key exists
+  stat:
+    path: "./reflective_kangaroo-{{ env }}"
+  register: reflective_kangaroo_stat
+
+- name: Copy instance key to Ansible directory
+  copy:
+    src: "../Terraform_Final/main/reflective_kangaroo-{{ env }}"
+    dest: "./reflective_kangaroo-{{ env }}"
+    remote_src: no
+  when: not reflective_kangaroo_stat.stat.exists
+
+- name: Set correct permissions on the instance key
+  file:
+    path: "./reflective_kangaroo-{{ env }}"
+    mode: "0600"
+  when: not reflective_kangaroo_stat.stat.exists

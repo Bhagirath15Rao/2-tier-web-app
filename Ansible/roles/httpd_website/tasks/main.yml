@@ -1,0 +1,22 @@
+- name: Update all packages
+  yum:
+    name: "*"
+    state: latest
+
+- name: Install httpd
+  yum:
+    name: httpd
+    state: present
+
+- name: HTML content using template
+  template:
+    src: ../../template/template.html.j2
+    dest: /var/www/html/index.html
+  vars:
+    bucket: "{{ bucket }}"
+
+- name: Start and enable httpd
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

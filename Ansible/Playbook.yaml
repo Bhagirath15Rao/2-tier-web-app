@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  gather_facts: no
+  vars:
+    env: "{{ env }}"
+  roles:
+    - key_copy
+    - s3_upload
+
+- name: "Run the Website Environment Setup"
+  hosts: "tag__Env_{{ env }}"
+  become: yes
+  gather_facts: no
+  vars:
+    bastion_tag: "tag__Name_reflective_kangaroo_{{ env }}_bastion"
+    ansible_ssh_common_args: >
+      -o StrictHostKeyChecking=no
+      -o UserKnownHostsFile=/dev/null
+      -o ProxyCommand="ssh -W %h:%p -q -i ./bastion-reflective_kangaroo-{{ env }} ec2-user@$(aws ec2 describe-instances --filters 'Name=tag:Name,Values=reflective_kangaroo-{{ env }}-bastion' 'Name=instance-state-name,Values=running' --query 'Reservations[].Instances[].PublicIpAddress' --output text)"
+    ansible_ssh_private_key_file: "./reflective_kangaroo-{{ env }}"
+    ansible_ssh_user: ec2-user
+  roles:
+    - httpd_website
